@@ -16,6 +16,7 @@ def contact():
     return render_template("contact.html")
 
 
+
 # Exercice 3 : API /tawarano/ qui retourne les dates + températures
 @app.route("/tawarano/")
 def meteo():
