@@ -12,8 +12,8 @@ def hello_world():
 
 # Exercice 2 : route /contact/
 @app.route("/contact/")
-def MaPremiereAPI():
-    return "<h2>Ma page de contact</h2>"
+def contact():
+    return render_template("contact.html")
 
 
 # Exercice 3 : API /tawarano/ qui retourne les dates + températures
