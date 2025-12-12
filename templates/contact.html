@@ -1,420 +1,135 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Contact – Projet Métriques</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      :root {
-        --bg: #020617;
-        --bg-2: #020617;
-        --primary: #38bdf8;
-        --primary-soft: rgba(56, 189, 248, 0.2);
-        --accent: #a855f7;
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --border: rgba(148, 163, 184, 0.4);
-        --error: #f97373;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact</title>
+  <style>
+    /* Styles de base et arrière-plan */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      /* Arrière-plan en dégradé animé (mode sombre) */
+      background: linear-gradient(-45deg, #0F2027, #203A43, #2C5364, #203A43);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+    /* Conteneur du formulaire (style glassmorphism) */
+    form {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      background-clip: padding-box;
+      padding: 2rem;
+      width: 90%;
+      max-width: 500px;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    form h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 1.5rem;
+      text-align: center;
+    }
 
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-          sans-serif;
-        min-height: 100vh;
-        color: var(--text);
-        background:
-          radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 55%),
-          radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.22), transparent 55%),
-          var(--bg-2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-      }
+    /* Styles des champs du formulaire */
+    .name-fields {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .name-fields input {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    input[type="email"], textarea {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    input[type="text"], input[type="email"], textarea {
+      transition: border-color 0.3s;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      padding: 0.5rem 0;
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    /* Effet au survol des champs */
+    input:hover, textarea:hover {
+      border-bottom-color: rgba(255, 255, 255, 0.8);
+    }
+    /* Effet au focus des champs */
+    input:focus, textarea:focus {
+      border-bottom-color: #1abc9c;
+      outline: none;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-      .shell {
-        max-width: 980px;
-        width: 100%;
-        display: grid;
-        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-        gap: 28px;
-        background: linear-gradient(
-              135deg,
-              rgba(15, 23, 42, 0.92),
-              rgba(15, 23, 42, 0.9)
-            )
-            border-box;
-        border-radius: 20px;
-        border: 1px solid rgba(148, 163, 184, 0.4);
-        box-shadow:
-          0 32px 80px rgba(15, 23, 42, 0.9),
-          0 0 0 1px rgba(15, 23, 42, 0.6);
-        padding: 24px 24px 26px;
-        backdrop-filter: blur(18px);
-      }
-
-      @media (max-width: 800px) {
-        .shell {
-          grid-template-columns: minmax(0, 1fr);
-          padding: 22px 18px 24px;
-        }
-      }
-
-      .left {
-        padding-right: 10px;
-        border-right: 1px solid rgba(51, 65, 85, 0.7);
-      }
-
-      @media (max-width: 800px) {
-        .left {
-          border-right: none;
-          border-bottom: 1px solid rgba(51, 65, 85, 0.7);
-          padding-right: 0;
-          padding-bottom: 18px;
-          margin-bottom: 10px;
-        }
-      }
-
-      .eyebrow {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.18em;
-        color: var(--muted);
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 8px;
-      }
-
-      .eyebrow-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 999px;
-        background: radial-gradient(circle at 30% 30%, #facc15, #f97316);
-        box-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
-      }
-
-      h1 {
-        font-size: 1.9rem;
-        margin-bottom: 6px;
-        letter-spacing: 0.03em;
-      }
-
-      .gradient-word {
-        background: linear-gradient(135deg, #38bdf8, #a855f7);
-        -webkit-background-clip: text;
-        color: transparent;
-      }
-
-      .subtitle {
-        font-size: 0.92rem;
-        color: var(--muted);
-        max-width: 420px;
-        line-height: 1.55;
-        margin-bottom: 16px;
-      }
-
-      .tagline {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 6px 11px;
-        border-radius: 999px;
-        background-color: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(55, 65, 81, 0.8);
-        font-size: 0.78rem;
-        color: #e5e7eb;
-        margin-bottom: 10px;
-      }
-
-      .tag-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: conic-gradient(
-          from 210deg,
-          #22c55e,
-          #22c55e,
-          #facc15,
-          #f97316,
-          #22c55e
-        );
-      }
-
-      .badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 10px;
-      }
-
-      .badge {
-        font-size: 0.75rem;
-        padding: 4px 10px;
-        border-radius: 999px;
-        border: 1px solid rgba(148, 163, 184, 0.5);
-        color: var(--muted);
-        background: rgba(15, 23, 42, 0.8);
-      }
-
-      .links {
-        margin-top: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        font-size: 0.8rem;
-        color: var(--muted);
-      }
-
-      .links a {
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      .links a:hover {
-        text-decoration: underline;
-      }
-
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background-color: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(55, 65, 81, 0.8);
-        font-size: 0.78rem;
-        color: #a5b4fc;
-      }
-
-      .pill span {
-        font-size: 0.85rem;
-      }
-
-      /* Form */
-
-      .right {
-        padding-left: 4px;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 4px;
-      }
-
-      .row {
-        display: flex;
-        gap: 10px;
-      }
-
-      @media (max-width: 600px) {
-        .row {
-          flex-direction: column;
-        }
-      }
-
-      .field {
-        flex: 1;
-      }
-
-      label {
-        display: block;
-        font-size: 0.8rem;
-        margin-bottom: 4px;
-        color: #cbd5f5;
-      }
-
-      input,
-      textarea {
-        width: 100%;
-        padding: 9px 11px;
-        border-radius: 11px;
-        border: 1px solid var(--border);
-        background-color: rgba(15, 23, 42, 0.9);
-        color: var(--text);
-        font-size: 0.9rem;
-        outline: none;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease,
-          background-color 0.15s ease;
-      }
-
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(148, 163, 184, 0.7);
-      }
-
-      input:focus,
-      textarea:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.5);
-        background-color: #020617;
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 110px;
-      }
-
-      .hint {
-        font-size: 0.75rem;
-        color: var(--muted);
-        margin-top: -6px;
-      }
-
-      .button-row {
-        margin-top: 4px;
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-
-      .btn-primary {
-        border: none;
-        border-radius: 999px;
-        padding: 10px 18px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        cursor: pointer;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: white;
-        box-shadow:
-          0 10px 25px rgba(56, 189, 248, 0.4),
-          0 0 0 1px rgba(15, 23, 42, 0.8);
-        transition: transform 0.12s ease, box-shadow 0.12s ease,
-          filter 0.12s ease;
-        flex-shrink: 0;
-      }
-
-      .btn-primary:hover {
-        filter: brightness(1.05);
-        transform: translateY(-1px);
-        box-shadow:
-          0 16px 38px rgba(56, 189, 248, 0.55),
-          0 0 0 1px rgba(15, 23, 42, 0.8);
-      }
-
-      .btn-primary:active {
-        transform: translateY(0);
-        box-shadow:
-          0 8px 18px rgba(56, 189, 248, 0.4),
-          0 0 0 1px rgba(15, 23, 42, 0.8);
-      }
-
-      .button-note {
-        font-size: 0.75rem;
-        color: var(--muted);
-      }
-
-      .footer {
-        margin-top: 14px;
-        font-size: 0.8rem;
-        color: var(--muted);
-        display: flex;
-        justify-content: space-between;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .footer a {
-        color: var(--primary);
-        text-decoration: none;
-      }
-
-      .footer a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="shell">
-      <div class="left">
-        <div class="eyebrow">
-          <span class="eyebrow-dot"></span>
-          projet métriques
-        </div>
-        <h1>
-          Page de <span class="gradient-word">contact</span>
-        </h1>
-        <p class="subtitle">
-          Laisse ton nom, ton prénom et un message. Les données ne seront pas
-          réellement envoyées : l'objectif ici est surtout
-          <strong>le design et la mise en page</strong>.
-        </p>
-
-        <div class="tagline">
-          <span class="tag-dot"></span>
-          Exercice 5 – Customisation de la page de contact
-        </div>
-
-        <div class="badges">
-          <span class="badge">Formulaire responsive</span>
-          <span class="badge">Design sombre moderne</span>
-          <span class="badge">Sans logique serveur</span>
-        </div>
-
-        <div class="links" style="margin-top: 14px;">
-          <span class="pill">
-            ⭐ <span>Évalué sur l'esthétique</span>
-          </span>
-          <span>•</span>
-          <a href="/">Retour à la page d’accueil</a>
-        </div>
-      </div>
-
-      <div class="right">
-        <form>
-          <div class="row">
-            <div class="field">
-              <label for="prenom">Prénom</label>
-              <input id="prenom" name="prenom" type="text" placeholder="Ton prénom" />
-            </div>
-            <div class="field">
-              <label for="nom">Nom</label>
-              <input id="nom" name="nom" type="text" placeholder="Ton nom" />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="ton.email@example.com"
-            />
-            <p class="hint">Optionnel – uniquement pour le réalisme du formulaire.</p>
-          </div>
-
-          <div class="field">
-            <label for="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              placeholder="Écris ton message ici (il ne sera pas envoyé, c’est un exercice de mise en forme)."
-            ></textarea>
-          </div>
-
-          <div class="button-row">
-            <button type="button" class="btn-primary">Envoyer le message</button>
-            <p class="button-note">Bouton décoratif (pas de traitement côté serveur).</p>
-          </div>
-        </form>
-
-        <div class="footer">
-          <span>Projet Métriques – Flask &amp; Google Charts</span>
-          <span>Designed par toi 💻</span>
-        </div>
-      </div>
+    /* Bouton d'envoi */
+    .submit-btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      cursor: pointer;
+      color: #ffffff;
+      background: #1abc9c;
+      border: none;
+      border-radius: 5px;
+      margin: 0 auto;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      user-select: none;
+      outline: none;
+      display: block;
+    }
+    .submit-btn:hover {
+      background-color: #17a489;
+      box-shadow: 0 0 10px #1abc9c;
+      transform: translateY(-2px);
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <!-- Formulaire de contact en mode sombre avec design moderne -->
+  <form action="#" method="post">
+    <h2>Contactez-nous</h2>
+    <div class="name-fields">
+      <input type="text" name="nom" placeholder="Nom" required />
+      <input type="text" name="prenom" placeholder="Prénom" required />
     </div>
-  </body>
+    <input type="email" name="email" placeholder="Email" required />
+    <textarea name="message" placeholder="Message" required></textarea>
+    <button type="submit" class="submit-btn">Envoyer</button>
+  </form>
+</body>
 </html>
