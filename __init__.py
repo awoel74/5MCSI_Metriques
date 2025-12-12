@@ -19,19 +19,16 @@ def MaPremiereAPI():
 # Exercice 3 : API /tawarano/ qui retourne les dates + températures
 @app.route("/tawarano/")
 def meteo():
-    # Appel de l'API d'exemple OpenWeatherMap
     response = urlopen("https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx")
     raw_content = response.read()
     json_content = json.loads(raw_content.decode("utf-8"))
 
     results = []
-    # On parcourt la liste des relevés météo
     for list_element in json_content.get("list", []):
         dt_value = list_element.get("dt")  # timestamp
         temp_day_value = list_element.get("main", {}).get("temp") - 273.15  # Kelvin → °C
         results.append({"Jour": dt_value, "temp": temp_day_value})
 
-    # On renvoie un JSON structuré
     return jsonify(results=results)
 
 
