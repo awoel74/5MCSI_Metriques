@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Activité des commits – Projet Métriques</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  </head>
+  <body>
+    <h2>Activité des commits du projet</h2>
+    <div id="commits_chart" style="width: 100%; height: 500px;"></div>
 
+    <script>
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        fetch('/commits/')
+          .then(response => response.json())
+          .then(data => {
+            var table = new google.visualization.DataTable();
+            table.addColumn('string', 'Date');
+            table.addColumn('number', 'Minute du commit');
+
+            data.results.forEach(entry => {
+              table.addRow([entry.date, entry.minute]);
+            });
+
+            var options = {
+              title: "Minutes des commits effectués",
+              legend: { position: "bottom" },
+              curveType: "function"
+            };
+
+            var chart = new google.visualization.LineChart(
+              document.getElementById("commits_chart")
+            );
+
+            chart.draw(table, options);
+          });
+      }
+    </script>
+  </body>
+</html>
